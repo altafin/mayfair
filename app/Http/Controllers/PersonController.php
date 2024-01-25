@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\Person\CreatePersonDTO;
+use App\DTO\Person\UpdatePersonDTO;
+use App\Http\Requests\StoreUpdatePersonRequest;
+use App\Services\PersonService;
 use Illuminate\Http\Request;
 
 class PersonController extends Controller
 {
+    public function __construct(
+        protected PersonService $service
+    ) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.person.index');
+        $people = $this->service->getAll($request->filter);
+        return view('admin.person.index', compact('people'));
     }
 
     /**
@@ -19,15 +28,18 @@ class PersonController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.person.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUpdatePersonRequest $request)
     {
-        //
+        $this->service->new(
+            CreatePersonDTO::makeFromRequest($request)
+        );
+        return redirect()->route('person.index');
     }
 
     /**
@@ -35,7 +47,10 @@ class PersonController extends Controller
      */
     public function show(string $id)
     {
-        //
+        if (!$people = $this->service->findOne($id)) {
+            return back();
+        }
+        return 'show'; //<--incluir view do show
     }
 
     /**
@@ -43,15 +58,24 @@ class PersonController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        if (!$people = $this->service->findOne($id)) {
+            return back();
+        }
+        return 'edit'; //<--incluir view do edit
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreUpdatePersonRequest $request)
     {
-        //
+        $person = $this->service->update(
+            UpdatePersonDTO::makeFromRequest($request)
+        );
+        if (!$person) {
+            return back();
+        }
+        return redirect()->route('person.index');
     }
 
     /**
@@ -59,6 +83,7 @@ class PersonController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->service->delete($id);
+        return redirect()->route('person.index');
     }
 }

@@ -8,6 +8,10 @@
 
 @section('content')
     <p>Person List.</p>
+    @foreach($people as $person)
+        {{ $person['name'] }}<br>
+        {{ $person['type'] }}<br>
+    @endforeach
 @stop
 
 @section('css')

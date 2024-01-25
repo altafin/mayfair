@@ -18,11 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin', function () {
-    return view('dashboard');
-});
+Route::middleware(['auth'])->group(function() {
+    Route::get('/admin', function () {
+        return view('dashboard');
+    });
 
-Route::resource('/admin/person', PersonController::class);
+    Route::resource('/admin/person', PersonController::class);
+});
 
 Auth::routes();
 
