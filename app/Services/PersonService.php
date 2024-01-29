@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\Person\CreatePersonDTO;
 use App\DTO\Person\UpdatePersonDTO;
+use App\Http\Requests\StoreUpdatePersonRequest;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use stdClass;
 class PersonService
@@ -22,9 +23,9 @@ class PersonService
         return $this->repository->findOne($id);
     }
 
-    public function new(CreatePersonDTO $dto): stdClass
+    public function new(StoreUpdatePersonRequest $request): stdClass
     {
-        return $this->repository->new($dto);
+        return $this->repository->new($request);
     }
 
     public function update(UpdatePersonDTO $dto): stdClass

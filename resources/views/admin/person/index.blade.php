@@ -7,8 +7,9 @@
 @stop
 
 @section('content')
-    <p>Person List.</p>
+    <p>Person List. - <a href="{{ route('person.create') }}">Create</a></p>
     @foreach($people as $person)
+        <a href="{{ route('person.edit', $person['id']) }}">edit</a>
         {{ $person['name'] }}<br>
         {{ $person['type'] }}<br>
     @endforeach

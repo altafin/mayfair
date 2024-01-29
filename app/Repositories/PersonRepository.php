@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\DTO\Person\CreatePersonDTO;
 use App\DTO\Person\UpdatePersonDTO;
+use App\Http\Requests\StoreUpdatePersonRequest;
 use App\Models\Person;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
@@ -42,9 +43,9 @@ class PersonRepository implements PersonRepositoryInterface
         $this->model->findOrFail($id)->delete();
     }
 
-    public function new(CreatePersonDTO $dto): stdClass
+    public function new(StoreUpdatePersonRequest $request): stdClass
     {
-        $person = Auth::user()->$this->model->create((array) $dto);
+        $person = Auth::user()->people()->create($request->all());
         return (object) $person->toArray();
     }
 

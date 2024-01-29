@@ -36,9 +36,7 @@ class PersonController extends Controller
      */
     public function store(StoreUpdatePersonRequest $request)
     {
-        $this->service->new(
-            CreatePersonDTO::makeFromRequest($request)
-        );
+        $this->service->new($request);
         return redirect()->route('person.index');
     }
 
@@ -58,10 +56,10 @@ class PersonController extends Controller
      */
     public function edit(string $id)
     {
-        if (!$people = $this->service->findOne($id)) {
+        if (!$person = $this->service->findOne($id)) {
             return back();
         }
-        return 'edit'; //<--incluir view do edit
+        return view('admin.person.edit', compact('person'));
     }
 
     /**
