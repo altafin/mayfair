@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTO\Person\CreatePersonDTO;
 use App\DTO\Person\UpdatePersonDTO;
 use App\Http\Requests\StoreUpdatePersonRequest;
+use App\Models\Person;
 use App\Services\PersonService;
 use Illuminate\Http\Request;
 
@@ -65,11 +66,11 @@ class PersonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreUpdatePersonRequest $request)
+    public function update(StoreUpdatePersonRequest $request, string $id)
     {
-        $person = $this->service->update(
-            UpdatePersonDTO::makeFromRequest($request)
-        );
+        dd($id);
+
+        $person = $this->service->update($request);
         if (!$person) {
             return back();
         }

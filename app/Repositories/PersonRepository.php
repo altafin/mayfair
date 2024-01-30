@@ -49,12 +49,14 @@ class PersonRepository implements PersonRepositoryInterface
         return (object) $person->toArray();
     }
 
-    public function update(UpdatePersonDTO $dto): stdClass|null
+    public function update(StoreUpdatePersonRequest $request): stdClass|null
     {
-        if (!$person = $this->model->find($dto->id)) {
+        dd($request);
+        if (!$person = $this->model->find($request->id)) {
             return null;
         }
-        $person->update((array) $dto);
+        $person->update($request->all());
+        dd($person);
         return (object) $person->toArray();
     }
 }

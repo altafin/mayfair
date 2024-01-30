@@ -14,7 +14,7 @@ interface PersonRepositoryInterface
     public function getAll(string $filter = null): array;
     public function findOne(string $id): stdClass|null;
     public function delete(string $id): void;
-    public function new(StoreUpdatePersonRequest $dto): stdClass;
-    public function update(UpdatePersonDTO $dto): stdClass|null;
+    public function new(StoreUpdatePersonRequest $request): stdClass;
+    public function update(StoreUpdatePersonRequest $request): stdClass|null;
 
 }

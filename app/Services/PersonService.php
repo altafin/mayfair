@@ -28,9 +28,9 @@ class PersonService
         return $this->repository->new($request);
     }
 
-    public function update(UpdatePersonDTO $dto): stdClass
+    public function update(StoreUpdatePersonRequest $request): stdClass|null
     {
-        return $this->repository->update($dto);
+        return $this->repository->update($request);
     }
 
     public function delete(string $id): void

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Person')
+@section('title', 'New Person')
 
 @section('content_header')
     <h1>New Person</h1>
@@ -8,16 +8,7 @@
 
 @section('content')
     <form action="{{ route('person.store') }}" method="post">
-        @csrf()
-        <label>Name</label>
-        <input type="text" name="name">
-        <br><label>Type</label>
-        <select name="type">
-            <option value="F">Física</option>
-            <option value="J">Jurídica</option>
-        </select>
-        <br>
-        <button type="submit">Enviar</button>
+        @include('admin.person.partials.form')
     </form>
 @stop
 
