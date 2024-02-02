@@ -7,9 +7,14 @@
 @stop
 
 @section('content')
-    <form action="{{ route('person.store') }}" method="post">
-        @include('admin.person.partials.form')
-    </form>
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">New Person</h3>
+        </div>
+        <form action="{{ route('person.store') }}" method="post">
+            @include('admin.person.partials.form')
+        </form>
+    </div>
 @stop
 
 @section('css')
