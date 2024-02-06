@@ -1,15 +1,15 @@
 @extends('adminlte::page')
 
-@section('title', 'Person')
+@section('title', $model)
 
 @section('content_header')
-    <h1>Person</h1>
+    <h1>{{$model}}</h1>
 @stop
 
 @section('content')
-    <p>Person List. - <a href="{{ route('person.create') }}">Create</a></p>
+    <p>{{$model}} List. - <a href="{{ route(strtolower($model) . '.create') }}">Create</a></p>
     @foreach($people as $person)
-        <a href="{{ route('person.edit', $person['id']) }}">edit</a>
+        <a href="{{ route(strtolower($model) . '.edit', $person['id']) }}">edit</a>
         {{ $person['name'] }}<br>
         {{ $person['type'] }}<br>
     @endforeach

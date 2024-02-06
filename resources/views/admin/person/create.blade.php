@@ -1,18 +1,18 @@
 @extends('adminlte::page')
 
-@section('title', 'New Person')
+@section('title', 'New ' . $model)
 
 @section('content_header')
-    <h1>New Person</h1>
+    <h1>New {{ $model }}</h1>
 @stop
 
 @section('content')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">New Person</h3>
+            <h3 class="card-title">New {{ $model }}</h3>
         </div>
-        <form action="{{ route('person.store') }}" method="post">
-            @include('admin.person.partials.form')
+        <form action="{{ route(strtolower($model) . '.store') }}" method="post">
+            @include('admin.person.partials.form', ['model' => $model])
         </form>
     </div>
 @stop

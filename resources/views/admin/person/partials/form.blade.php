@@ -18,5 +18,5 @@
 
 <div class="card-footer">
     <button type="submit" class="btn btn-primary">Submit</button>
-    <a href="{{ route('person.index') }}" class="btn btn-default float-right">Cancel</a>
+    <a href="{{ route(strtolower($model) . '.index') }}" class="btn btn-default float-right">Cancel</a>
 </div>

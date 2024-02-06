@@ -311,9 +311,14 @@ return [
 //            'url'  => 'admin/blog',
 //            'can'  => 'manage-blog',
 //        ],
+//        [
+//            'text'        => 'Person',
+//            'url'         => 'admin/person',
+//            'icon' => 'fas fa-fw fa-user',
+//        ],
         [
-            'text'        => 'Person',
-            'url'         => 'admin/person',
+            'text'        => 'Client',
+            'url'         => 'admin/client',
             'icon' => 'fas fa-fw fa-user',
         ],
         [

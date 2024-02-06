@@ -8,19 +8,29 @@ use Illuminate\Http\Request;
 
 class PersonController extends Controller
 {
+    private $model;
     public function __construct(
         protected PersonRepositoryInterface $personRepository
-    ) {}
+    ) {
+        $model = explode( '\\', get_class($this));
+        $model = strtolower(array_pop($model));
+        $this->model = ucfirst(str_replace('controller', '', $model));
+    }
 
     public function index(Request $request)
     {
+        //$model = ucfirst(explode('.', $request->route()->getName())[0]);
+        //dd(get_class($this));
+        //dd(get_parent_class($this));
         $people = $this->personRepository->getAll($request->filter);
-        return view('admin.person.index', compact('people'));
+        $model = $this->model;
+        return view('admin.person.index', compact('people', 'model'));
     }
 
     public function create()
     {
-        return view('admin.person.create');
+        $model = $this->model;
+        return view('admin.person.create', compact('model'));
     }
 
     public function edit(string $id)
@@ -28,13 +38,14 @@ class PersonController extends Controller
         if (!$person = $this->personRepository->findOne($id)) {
             return back();
         }
-        return view('admin.person.edit', compact('person'));
+        $model = $this->model;
+        return view('admin.person.edit', compact('person', 'model'));
     }
 
     public function store(StoreUpdatePersonRequest $request)
     {
         $this->personRepository->new($request);
-        return redirect()->route('person.index');
+        return redirect()->route(strtolower($this->model) . '.index');
     }
 
     public function update(StoreUpdatePersonRequest $request, string $id)
@@ -43,7 +54,7 @@ class PersonController extends Controller
         if (!$person) {
             return back();
         }
-        return redirect()->route('person.index');
+        return redirect()->route(strtolower($this->model) . '.index');
     }
 
 

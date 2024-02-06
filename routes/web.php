@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PersonController;
+use App\Http\Controllers\{
+    ClientController,
+    PersonController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +26,8 @@ Route::middleware(['auth'])->group(function() {
         return view('dashboard');
     });
 
-    Route::resource('/admin/person', PersonController::class);
+    //Route::resource('/admin/person', PersonController::class);
+    Route::resource('/admin/client', ClientController::class);
 });
 
 Auth::routes();
