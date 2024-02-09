@@ -44,7 +44,7 @@ class PersonController extends Controller
 
     public function store(StoreUpdatePersonRequest $request)
     {
-        $this->personRepository->new($request);
+        $this->personRepository->new($request, $this->model);
         return redirect()->route(strtolower($this->model) . '.index');
     }
 

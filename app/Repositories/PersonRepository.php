@@ -3,9 +3,12 @@
 namespace App\Repositories;
 
 use App\Http\Requests\StoreUpdatePersonRequest;
+use App\Models\Document;
+use App\Models\DocumentType;
 use App\Models\Person;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use stdClass;
 
 class PersonRepository implements PersonRepositoryInterface
@@ -41,10 +44,24 @@ class PersonRepository implements PersonRepositoryInterface
         $this->model->findOrFail($id)->delete();
     }
 
-    public function new(StoreUpdatePersonRequest $request): stdClass
+    public function new(StoreUpdatePersonRequest $request, string $model): stdClass
     {
-        $person = Auth::user()->people()->create($request->all());
-        return (object) $person->toArray();
+        $person = DB::transaction(function () use ($request, $model) {
+            //Save Person
+            $person =  Auth::user()->people()->create($request->all());
+            //Save Category
+            $person->categories()->create(['name' => $model]);
+            //Save Document
+            if ($request->filled('document')) {
+                $documentType = DocumentType::find(1);
+                $document = new Document();
+                $document->value = $request->document;
+                $document->documentType()->associate($documentType);
+                $person->documents()->save($document);
+            }
+            return $person;
+        });
+        return (object)$person->toArray();
     }
 
     public function update(StoreUpdatePersonRequest $request, string $id): stdClass|null
