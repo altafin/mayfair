@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Person;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,7 @@ class Person extends Model
     use SoftDeletes;
     use HasFactory;
 
+    protected $table = 'people';
     protected $fillable = [
         'name',
         'type'

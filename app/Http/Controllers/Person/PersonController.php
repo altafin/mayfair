@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Person;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdatePersonRequest;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Http\Request;

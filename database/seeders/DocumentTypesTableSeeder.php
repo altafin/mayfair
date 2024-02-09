@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\DocumentType;
-//use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Person\DocumentType;
 use Illuminate\Database\Seeder;
+
+//use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DocumentTypesTableSeeder extends Seeder
 {
