@@ -28,8 +28,8 @@
     <div class="row">
         <div class="col-sm-3">
             <div class="form-group">
-                <label for="zipcode">CEP</label>
-                <input class="form-control" data-inputmask="'mask':'99999-999'" data-mask type="text" id="zipcode" name="zipcode" value="{{ $person->zipcode ?? old('zipcode') }}">
+                <label for="zip_code">CEP</label>
+                <input class="form-control" data-inputmask="'mask':'99999-999'" data-mask type="text" id="zip_code" name="zip_code" value="{{ $person->zip_code ?? old('zip_code') }}">
             </div>
         </div>
         <div class="col-sm-4">
@@ -56,6 +56,7 @@
             <div class="form-group">
                 <label for="uf">UF</label>
                 <select class="custom-select rounded-1" id="uf" name="uf">
+                    <option value=""></option>
                     <option value="PR">Paraná</option>
                 </select>
             </div>
@@ -64,6 +65,7 @@
             <div class="form-group">
                 <label for="city">Cidade</label>
                 <select class="custom-select rounded-1" id="city" name="city">
+                    <option value=""></option>
                     <option value="Londrina">Londrina</option>
                 </select>
             </div>

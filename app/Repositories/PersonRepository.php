@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Http\Requests\StoreUpdatePersonRequest;
+use App\Models\Person\Address;
+use App\Models\Person\AddressType;
 use App\Models\Person\Document;
 use App\Models\Person\DocumentType;
 use App\Models\Person\Person;
@@ -46,12 +48,13 @@ class PersonRepository implements PersonRepositoryInterface
 
     public function new(StoreUpdatePersonRequest $request, string $model): stdClass
     {
+        //dd($request);
         $person = DB::transaction(function () use ($request, $model) {
-            //Save Person
+            //Create Person
             $person =  Auth::user()->people()->create($request->all());
-            //Save Category
+            //Bind with Categories
             $person->categories()->create(['name' => $model]);
-            //Save Document
+            //Bind with Documents
             if ($request->filled('document')) {
                 $TipoDocumento = null;
                 switch ($request->type) {
@@ -67,6 +70,14 @@ class PersonRepository implements PersonRepositoryInterface
                 $document->value = $request->document;
                 $document->documentType()->associate($documentType);
                 $person->documents()->save($document);
+            }
+            //Bind with Addressses
+            $arrAddressFields = array('zip_code', 'street', 'number', 'complement', 'uf', 'city', 'district', 'reference');
+            if ($request->anyFilled($arrAddressFields)) {
+                $addressType = AddressType::find(1);
+                $address = new Address($request->only($arrAddressFields));
+                $address->addressType()->associate($addressType);
+                $person->addresses()->save($address);
             }
             return $person;
         });

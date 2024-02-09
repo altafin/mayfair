@@ -34,4 +34,9 @@ class Person extends Model
     {
         return $this->hasMany(Document::class);
     }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(Address::class);
+    }
 }

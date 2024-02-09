@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('document_type_id');
             $table->foreign('document_type_id')->references('id')->on('people_document_types');
             $table->string('value', 255);
+            $table->json('metadata')->nullable()->default(null);
             $table->unsignedBigInteger('person_id');
             $table->foreign('person_id')->references('id')->on('people');
             $table->timestamps();
