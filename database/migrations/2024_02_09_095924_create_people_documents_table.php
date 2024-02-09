@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('document_types', function (Blueprint $table) {
+        Schema::create('people_documents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 255);
-            $table->boolean('system')->default(false);
+            $table->unsignedBigInteger('document_type_id');
+            $table->foreign('document_type_id')->references('id')->on('people_document_types');
+            $table->string('value', 255);
+            $table->unsignedBigInteger('person_id');
+            $table->foreign('person_id')->references('id')->on('people');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('document_types');
+        Schema::dropIfExists('people_documents');
     }
 };

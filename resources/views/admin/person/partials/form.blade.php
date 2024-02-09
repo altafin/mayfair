@@ -35,7 +35,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <label for="address">Endereço</label>
-                <input class="form-control" type="text" id="address" name="address" value="{{ $person->address ?? old('address') }}">
+                <input class="form-control" type="text" id="street" name="street" value="{{ $person->street ?? old('street') }}">
             </div>
         </div>
         <div class="col-sm-2">

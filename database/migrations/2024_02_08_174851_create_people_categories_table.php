@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('people_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('document_type_id');
-            $table->foreign('document_type_id')->references('id')->on('document_types');
-            $table->string('value', 255);
+            $table->string('name', 255);
             $table->unsignedBigInteger('person_id');
             $table->foreign('person_id')->references('id')->on('people');
             $table->timestamps();
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('people_categories');
     }
 };

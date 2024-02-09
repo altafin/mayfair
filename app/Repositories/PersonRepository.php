@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Http\Requests\StoreUpdatePersonRequest;
-use App\Models\Document;
-use App\Models\DocumentType;
-use App\Models\Person;
+use App\Models\Person\Document;
+use App\Models\Person\DocumentType;
+use App\Models\Person\Person;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -53,7 +53,16 @@ class PersonRepository implements PersonRepositoryInterface
             $person->categories()->create(['name' => $model]);
             //Save Document
             if ($request->filled('document')) {
-                $documentType = DocumentType::find(1);
+                $TipoDocumento = null;
+                switch ($request->type) {
+                    case 'F':
+                        $TipoDocumento = 1;
+                        break;
+                    case 'J':
+                        $TipoDocumento = 2;
+                        break;
+                }
+                $documentType = DocumentType::find($TipoDocumento);
                 $document = new Document();
                 $document->value = $request->document;
                 $document->documentType()->associate($documentType);
