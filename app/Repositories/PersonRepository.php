@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Http\Requests\StoreUpdatePersonRequest;
 use App\Models\Person\Address;
 use App\Models\Person\AddressType;
+use App\Models\Person\Contact;
+use App\Models\Person\ContactType;
 use App\Models\Person\Document;
 use App\Models\Person\DocumentType;
 use App\Models\Person\Person;
@@ -71,7 +73,7 @@ class PersonRepository implements PersonRepositoryInterface
                 $document->documentType()->associate($documentType);
                 $person->documents()->save($document);
             }
-            //Bind with Addressses
+            //Bind with Addresses
             $arrAddressFields = array('zip_code', 'street', 'number', 'complement', 'uf', 'city', 'district', 'reference');
             if ($request->anyFilled($arrAddressFields)) {
                 $addressType = AddressType::find(1);
@@ -79,6 +81,35 @@ class PersonRepository implements PersonRepositoryInterface
                 $address->addressType()->associate($addressType);
                 $person->addresses()->save($address);
             }
+            //Bind with Contacts
+            $arrContactFields = array('email', 'cell', 'phone', 'website');
+            if ($request->anyFilled($arrContactFields)) {
+                foreach ($arrContactFields as $field) {
+                    if ($request->filled($field)) {
+                        $tipoContato = null;
+                        switch ($field) {
+                            case 'email':
+                                $tipoContato = 1;
+                                break;
+                            case 'phone':
+                                $tipoContato = 2;
+                                break;
+                            case 'cell':
+                                $tipoContato = 3;
+                                break;
+                            case 'website':
+                                $tipoContato = 4;
+                                break;
+                        }
+                        $contactType = ContactType::find($tipoContato);
+                        $contact = new Contact();
+                        $contact->value = $request->$field;
+                        $contact->contactType()->associate($contactType);
+                        $person->contacts()->save($contact);
+                    }
+                }
+            }
+
             return $person;
         });
         return (object)$person->toArray();

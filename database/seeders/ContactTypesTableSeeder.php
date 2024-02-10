@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Person\AddressType;
+use App\Models\Person\ContactType;
 //use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AddressTypesTableSeeder extends Seeder
+class ContactTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,16 +15,24 @@ class AddressTypesTableSeeder extends Seeder
     {
         $arrTypes = array(
             array(
-                'name' => 'HOME',
+                'name' => 'EMAIL',
                 'system' => true,
             ),
             array(
-                'name' => 'WORK',
+                'name' => 'PHONE',
+                'system' => true,
+            ),
+            array(
+                'name' => 'CELL',
+                'system' => true,
+            ),
+            array(
+                'name' => 'WEBSITE',
                 'system' => true,
             ),
         );
         foreach ($arrTypes as $types) {
-            AddressType::factory()->create($types);
+            ContactType::factory()->create($types);
         }
     }
 }
