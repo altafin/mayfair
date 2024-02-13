@@ -48,6 +48,7 @@ class PersonRepository implements PersonRepositoryInterface
     public function findOne(string $id): stdClass|null
     {
         $person = $this->model->find($id);
+        $person->documents->where('document_type_id', ($person->type == 'F' ? 1 : 2));
         if (!$person) {
             return null;
         }
@@ -65,7 +66,7 @@ class PersonRepository implements PersonRepositoryInterface
             //Create Person
             $person =  Auth::user()->people()->create($request->all());
             //Bind with Categories
-            $person->categories()->create(['name' => $model]);
+            $person->categories()->create(['name' => strtolower($model)]);
             //Bind with Documents
             if ($request->filled('document')) {
                 $TipoDocumento = null;

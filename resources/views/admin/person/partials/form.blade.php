@@ -20,8 +20,8 @@
         </div>
         <div class="col-sm-3">
             <div class="form-group">
-                <label for="document">CPF</label>
-                <input class="form-control" data-inputmask="'mask':'999.999.999-99'" data-mask type="text" id="document" name="document" value="{{ $person->name ?? old('name') }}">
+                <label for="document">{{ isset($person) ? $person->type == 'F' ?? old('type') == 'F' ? 'CPF' : 'CNPJ' : 'CPF' }}</label>
+                <input class="form-control" data-inputmask="'mask':'999.999.999-99'" data-mask type="text" id="document" name="document" value="{{ $person->documents[0]['value'] ?? old('document') }}">
             </div>
         </div>
     </div>
