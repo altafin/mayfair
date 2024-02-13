@@ -19,7 +19,7 @@
                     <form>
                         <div class="card-tools float-left">
                             <div class="input-group input-group-sm" style="width: 150px;">
-                                <input type="text" name="filter" value="{{ $filters['filter'] }}" class="form-control float-right" placeholder="Search">
+                                <input type="text" name="filter" value="{{ $filters['filter'] }}" class="form-control float-right" placeholder="Nome">
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-default">
                                         <i class="fas fa-search"></i>
@@ -44,20 +44,25 @@
                             <tr>
                                 <td><a href="{{ route(strtolower($model) . '.edit', $person->id) }}">edit</a></td>
                                 <td>{{ $person->name }}</td>
-                                <td>{{ $person->type }}</td>
+                                <td>{{ $person->type == 'J' ? 'Jurídica' : 'Física'  }}</td>
                             </tr>
                         @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="3"></th>
+                                <th colspan="3">
+                                    {{ $people->appends(['filter' => $filters['filter']])->links() }}
+                                    <div>Showing {{( $people->currentpage()-1)*$people->perpage()+1 }} to {{ $people->currentpage()*$people->perpage() <= $people->total() ? $people->currentpage()*$people->perpage() : $people->total() }}
+                                        of  {{ $people->total() }} entries
+                                    </div>
+                                </th>
                             </tr>
                         </tfoot>
                     </table>
-                    <x-pagination
-                        :paginator="$people"
-                        :appends="$filters"
-                    />
+{{--                    <x-pagination--}}
+{{--                        :paginator="$people"--}}
+{{--                        :appends="$filters"--}}
+{{--                    />--}}
                 </div>
             </div>
         </div>

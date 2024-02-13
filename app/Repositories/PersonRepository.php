@@ -10,7 +10,6 @@ use App\Models\Person\ContactType;
 use App\Models\Person\Document;
 use App\Models\Person\DocumentType;
 use App\Models\Person\Person;
-use App\Repositories\Contracts\PaginationInterface;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,25 +26,23 @@ class PersonRepository implements PersonRepositoryInterface
         return $this->model
             ->where(function ($query) use ($filter) {
                 if ($filter) {
-                    $query->where('type', $filter);
-                    $query->where('name', 'like', "%{$filter}%");
+                    $query->Where('name', 'like', "%{$filter}%");
                 }
             })
             ->get()
             ->toArray();
     }
 
-    public function getPaginate(int $page = 1, int $totalPerPage = 15, string $filter = null): PaginationInterface
+    public function getPaginate(int $page = 1, int $totalPerPage = 15, string $filter = null)
     {
         $result = $this->model
             ->where(function ($query) use ($filter) {
                 if ($filter) {
-                    $query->where('type', $filter);
-                    $query->orWhere('name', 'like', "%{$filter}%");
+                    $query->where('name', 'like', "%{$filter}%");
                 }
             })
             ->paginate($totalPerPage, ['*'], 'page', $page);
-        return new PaginationPresenter($result);
+        return $result;
     }
 
     public function findOne(string $id): stdClass|null
