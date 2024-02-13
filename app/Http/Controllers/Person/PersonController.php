@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Person;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdatePersonRequest;
+use App\Models\Person\Person;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -20,12 +21,22 @@ class PersonController extends Controller
 
     public function index(Request $request)
     {
+        $people = $this->personRepository->getPaginate(
+            page: $request->get('page', 1),
+            totalPerPage: $request->get('per_page', 15),
+            filter: $request->filter
+        );
+
+        $filters = ['filter' => $request->get('filter', '')];
+
+        //$people = $this->personRepository->getPagination();
+        //$people = $this->personRepository->getAll($request->filter);
+        $model = $this->model;
+        return view('admin.person.index', compact('people', 'model', 'filters'));
+
         //$model = ucfirst(explode('.', $request->route()->getName())[0]);
         //dd(get_class($this));
         //dd(get_parent_class($this));
-        $people = $this->personRepository->getAll($request->filter);
-        $model = $this->model;
-        return view('admin.person.index', compact('people', 'model'));
     }
 
     public function create()
@@ -57,84 +68,4 @@ class PersonController extends Controller
         }
         return redirect()->route(strtolower($this->model) . '.index');
     }
-
-
-
-
-
-
-//    public function __construct(
-//        protected PersonService $service
-//    ) {}
-//
-//    /**
-//     * Display a listing of the resource.
-//     */
-//    public function index(Request $request)
-//    {
-//        $people = $this->service->getAll($request->filter);
-//        return view('admin.person.index', compact('people'));
-//    }
-//
-//    /**
-//     * Show the form for creating a new resource.
-//     */
-//    public function create()
-//    {
-//        return view('admin.person.create');
-//    }
-//
-//    /**
-//     * Store a newly created resource in storage.
-//     */
-//    public function store(StoreUpdatePersonRequest $request)
-//    {
-//        $this->service->new($request);
-//        return redirect()->route('person.index');
-//    }
-//
-//    /**
-//     * Display the specified resource.
-//     */
-//    public function show(string $id)
-//    {
-//        if (!$people = $this->service->findOne($id)) {
-//            return back();
-//        }
-//        return 'show'; //<--incluir view do show
-//    }
-//
-//    /**
-//     * Show the form for editing the specified resource.
-//     */
-//    public function edit(string $id)
-//    {
-//        if (!$person = $this->service->findOne($id)) {
-//            return back();
-//        }
-//        return view('admin.person.edit', compact('person'));
-//    }
-//
-//    /**
-//     * Update the specified resource in storage.
-//     */
-//    public function update(StoreUpdatePersonRequest $request, string $id)
-//    {
-//        dd($id);
-//
-//        $person = $this->service->update($request);
-//        if (!$person) {
-//            return back();
-//        }
-//        return redirect()->route('person.index');
-//    }
-//
-//    /**
-//     * Remove the specified resource from storage.
-//     */
-//    public function destroy(string $id)
-//    {
-//        $this->service->delete($id);
-//        return redirect()->route('person.index');
-//    }
 }

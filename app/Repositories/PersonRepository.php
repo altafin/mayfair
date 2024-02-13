@@ -10,6 +10,7 @@ use App\Models\Person\ContactType;
 use App\Models\Person\Document;
 use App\Models\Person\DocumentType;
 use App\Models\Person\Person;
+use App\Repositories\Contracts\PaginationInterface;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,19 @@ class PersonRepository implements PersonRepositoryInterface
             ->toArray();
     }
 
+    public function getPaginate(int $page = 1, int $totalPerPage = 15, string $filter = null): PaginationInterface
+    {
+        $result = $this->model
+            ->where(function ($query) use ($filter) {
+                if ($filter) {
+                    $query->where('type', $filter);
+                    $query->orWhere('name', 'like', "%{$filter}%");
+                }
+            })
+            ->paginate($totalPerPage, ['*'], 'page', $page);
+        return new PaginationPresenter($result);
+    }
+
     public function findOne(string $id): stdClass|null
     {
         $person = $this->model->find($id);
@@ -50,7 +64,6 @@ class PersonRepository implements PersonRepositoryInterface
 
     public function new(StoreUpdatePersonRequest $request, string $model): stdClass
     {
-        //dd($request);
         $person = DB::transaction(function () use ($request, $model) {
             //Create Person
             $person =  Auth::user()->people()->create($request->all());

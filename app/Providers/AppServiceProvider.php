@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use App\Repositories\PersonRepository;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrap();
         $this->app->bind(PersonRepositoryInterface::class, PersonRepository::class);
     }
 }

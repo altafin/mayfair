@@ -24,6 +24,7 @@ Route::middleware(['auth'])->group(function() {
     });
 
     //Route::resource('/admin/person', PersonController::class);
+    //Route::get('/admin/client/list', [ClientController::class, 'list'])->name('client.list');
     Route::resource('/admin/client', ClientController::class);
 });
 
