@@ -28,7 +28,7 @@
                             </div>
                         </div>
                     </form>
-                    <a href="{{ route(strtolower($model) . '.create') }}" class="btn-sm btn-outline-info float-right">Novo registro</a>
+                    <a href="{{ route(strtolower($model) . '.create') }}" class="btn-sm btn-outline-info float-right" style="border: 2px solid white; border-radius: 5px;">Novo registro</a>
                 </div>
                 <div class="card-body table-responsive p-0">
                     <table id="example" class="table table-hover text-nowrap" style="width:100%">

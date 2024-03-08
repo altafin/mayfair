@@ -13,6 +13,7 @@ use App\Models\Person\Person;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use League\CommonMark\Extension\CommonMark\Delimiter\Processor\EmphasisDelimiterProcessor;
 use stdClass;
 
 class PersonRepository implements PersonRepositoryInterface
@@ -69,16 +70,9 @@ class PersonRepository implements PersonRepositoryInterface
             $person->categories()->create(['name' => strtolower($model)]);
             //Bind with Documents
             if ($request->filled('document')) {
-                $TipoDocumento = null;
-                switch ($request->type) {
-                    case 'F':
-                        $TipoDocumento = 1;
-                        break;
-                    case 'J':
-                        $TipoDocumento = 2;
-                        break;
-                }
-                $documentType = DocumentType::find($TipoDocumento);
+                $arrDocumentTypeId = array('F' => 1, 'J' => 2);
+                $documentTypeId = $arrDocumentTypeId[$request->type];
+                $documentType = DocumentType::find($documentTypeId);
                 $document = new Document();
                 $document->value = $request->document;
                 $document->documentType()->associate($documentType);
@@ -93,26 +87,12 @@ class PersonRepository implements PersonRepositoryInterface
                 $person->addresses()->save($address);
             }
             //Bind with Contacts
-            $arrContactFields = array('email', 'cell', 'phone', 'website');
+            $arrContactTypeId = array('email' => 1, 'phone' => 2, 'cell' => 3, 'website' => 4);
+            $arrContactFields = array_keys($arrContactTypeId);
             if ($request->anyFilled($arrContactFields)) {
-                foreach ($arrContactFields as $field) {
+                foreach ($arrContactTypeId as $field => $contactTypeId) {
                     if ($request->filled($field)) {
-                        $tipoContato = null;
-                        switch ($field) {
-                            case 'email':
-                                $tipoContato = 1;
-                                break;
-                            case 'phone':
-                                $tipoContato = 2;
-                                break;
-                            case 'cell':
-                                $tipoContato = 3;
-                                break;
-                            case 'website':
-                                $tipoContato = 4;
-                                break;
-                        }
-                        $contactType = ContactType::find($tipoContato);
+                        $contactType = ContactType::find($contactTypeId);
                         $contact = new Contact();
                         $contact->value = $request->$field;
                         $contact->contactType()->associate($contactType);
