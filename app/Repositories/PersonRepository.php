@@ -13,11 +13,14 @@ use App\Models\Person\Person;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use League\CommonMark\Extension\CommonMark\Delimiter\Processor\EmphasisDelimiterProcessor;
 use stdClass;
 
 class PersonRepository implements PersonRepositoryInterface
 {
+    private $arrDocumentTypeId = array('F' => 1, 'J' => 2);
+    private $arrAddressFields = array('zip_code', 'street', 'number', 'complement', 'uf', 'city', 'district', 'reference');
+    private $arrContactTypeId = array('email' => 1, 'phone' => 2, 'cell' => 3, 'website' => 4);
+
     public function __construct(
         protected Person $model
     ) {}
@@ -70,8 +73,7 @@ class PersonRepository implements PersonRepositoryInterface
             $person->categories()->create(['name' => strtolower($model)]);
             //Bind with Documents
             if ($request->filled('document')) {
-                $arrDocumentTypeId = array('F' => 1, 'J' => 2);
-                $documentTypeId = $arrDocumentTypeId[$request->type];
+                $documentTypeId = $this->arrDocumentTypeId[$request->type];
                 $documentType = DocumentType::find($documentTypeId);
                 $document = new Document();
                 $document->value = $request->document;
@@ -79,18 +81,16 @@ class PersonRepository implements PersonRepositoryInterface
                 $person->documents()->save($document);
             }
             //Bind with Addresses
-            $arrAddressFields = array('zip_code', 'street', 'number', 'complement', 'uf', 'city', 'district', 'reference');
-            if ($request->anyFilled($arrAddressFields)) {
+            if ($request->anyFilled($this->arrAddressFields)) {
                 $addressType = AddressType::find(1);
-                $address = new Address($request->only($arrAddressFields));
+                $address = new Address($request->only($this->arrAddressFields));
                 $address->addressType()->associate($addressType);
                 $person->addresses()->save($address);
             }
             //Bind with Contacts
-            $arrContactTypeId = array('email' => 1, 'phone' => 2, 'cell' => 3, 'website' => 4);
-            $arrContactFields = array_keys($arrContactTypeId);
+            $arrContactFields = array_keys($this->arrContactTypeId);
             if ($request->anyFilled($arrContactFields)) {
-                foreach ($arrContactTypeId as $field => $contactTypeId) {
+                foreach ($this->arrContactTypeId as $field => $contactTypeId) {
                     if ($request->filled($field)) {
                         $contactType = ContactType::find($contactTypeId);
                         $contact = new Contact();
@@ -100,7 +100,6 @@ class PersonRepository implements PersonRepositoryInterface
                     }
                 }
             }
-
             return $person;
         });
         return (object)$person->toArray();
@@ -108,10 +107,30 @@ class PersonRepository implements PersonRepositoryInterface
 
     public function update(StoreUpdatePersonRequest $request, string $id): stdClass|null
     {
-        if (!$person = $this->model->find($id)) {
-            return null;
-        }
-        $person->update($request->all());
+        $person = DB::transaction(function () use ($request, $id) {
+            //Find Person
+            if (!$person = $this->model->with(['documents'])->find($id)) {
+                return null;
+            }
+            //Update person data
+            $person->fill($request->only('name', 'type'));
+            //Checks if the person's document has changed
+            if ($person->isDirty('type')) {
+                //Get the old value
+                $typeOldValue = $person->getOriginal('type');
+                //Obtain the person’s documents
+                $document = $person->documents->where('document_type_id', $this->arrDocumentTypeId[$typeOldValue])->first();
+                //Checks if the document field has been filled in
+                if ($request->filled('document')) {
+
+                } else {
+                    //You changed the type but did not fill in the field, so you must remove the old document
+                    $document->delete();
+                }
+            }
+            $person->save();
+            return $person;
+        });
         return (object) $person->toArray();
     }
 }
