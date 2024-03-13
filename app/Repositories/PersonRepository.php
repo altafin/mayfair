@@ -122,7 +122,11 @@ class PersonRepository implements PersonRepositoryInterface
                 $document = $person->documents->where('document_type_id', $this->arrDocumentTypeId[$typeOldValue])->first();
                 //Checks if the document field has been filled in
                 if ($request->filled('document')) {
-
+                    $documentTypeId = $this->arrDocumentTypeId[$request->type];
+                    $documentType = DocumentType::find($documentTypeId);
+                    $document->value = $request->document;
+                    $document->documentType()->associate($documentType);
+                    $person->documents()->save($document);
                 } else {
                     //You changed the type but did not fill in the field, so you must remove the old document
                     $document->delete();
