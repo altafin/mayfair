@@ -115,17 +115,19 @@ class PersonRepository implements PersonRepositoryInterface
             //Update person data
             $person->fill($request->only('name', 'type'));
             //Checks if the person's document has changed
-            if ($person->isDirty('type')) {
+            if ($person->isDirty(['type', 'document'])) {
                 //Get the old value
                 $typeOldValue = $person->getOriginal('type');
                 //Obtain the person’s documents
                 $document = $person->documents->where('document_type_id', $this->arrDocumentTypeId[$typeOldValue])->first();
                 //Checks if the document field has been filled in
                 if ($request->filled('document')) {
-                    $documentTypeId = $this->arrDocumentTypeId[$request->type];
-                    $documentType = DocumentType::find($documentTypeId);
+                    if ($typeOldValue !== $person->type()) {
+                        $documentTypeId = $this->arrDocumentTypeId[$request->type];
+                        $documentType = DocumentType::find($documentTypeId);
+                        $document->documentType()->associate($documentType);
+                    }
                     $document->value = $request->document;
-                    $document->documentType()->associate($documentType);
                     $person->documents()->save($document);
                 } else {
                     //You changed the type but did not fill in the field, so you must remove the old document
