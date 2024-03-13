@@ -114,25 +114,43 @@ class PersonRepository implements PersonRepositoryInterface
             }
             //Update person data
             $person->fill($request->only('name', 'type'));
-            //Checks if the person's document has changed
-            if ($person->isDirty(['type', 'document'])) {
-                //Get the old value
-                $typeOldValue = $person->getOriginal('type');
-                //Obtain the person’s documents
-                $document = $person->documents->where('document_type_id', $this->arrDocumentTypeId[$typeOldValue])->first();
-                //Checks if the document field has been filled in
-                if ($request->filled('document')) {
-                    if ($typeOldValue !== $person->type()) {
+            $documentType = $person->type;
+            //Checks if the person type has changed
+            if ($person->isDirty(['type'])) {
+                //If it changed, take the old value
+                $documentType = $person->getOriginal('type');
+            }
+            //Get the specific type of document (F = 1 | J = 2)
+            $document = $person->documents->where('document_type_id', $this->arrDocumentTypeId[$documentType])->first();
+            if ($document) {
+                $documentTemp = $document;
+                //Update the person's document temporary
+                $documentTemp->value = $request->document;
+                //Checks if the person's document has changed
+                if ($documentTemp->isDirty(['value'])) {
+                    if ($request->filled('document')) {
+                        //Delete the old document
+                        $document->delete();
+                        //Create the person's new document
+                        $document = new Document();
+                        $document->value = $request->document;
                         $documentTypeId = $this->arrDocumentTypeId[$request->type];
                         $documentType = DocumentType::find($documentTypeId);
                         $document->documentType()->associate($documentType);
+                        $person->documents()->save($document);
+                    } else {
+                        //You changed the type but did not fill in the field, so you must remove the old document
+                        $document->delete();
                     }
-                    $document->value = $request->document;
-                    $person->documents()->save($document);
-                } else {
-                    //You changed the type but did not fill in the field, so you must remove the old document
-                    $document->delete();
                 }
+            } else {
+                //Cria um novo documento caso não seja localizado nenhum anterior
+                $document = new Document();
+                $document->value = $request->document;
+                $documentTypeId = $this->arrDocumentTypeId[$request->type];
+                $documentType = DocumentType::find($documentTypeId);
+                $document->documentType()->associate($documentType);
+                $person->documents()->save($document);
             }
             $person->save();
             return $person;
