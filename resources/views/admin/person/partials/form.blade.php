@@ -29,25 +29,25 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="zip_code">CEP</label>
-                <input class="form-control" data-inputmask="'mask':'99999-999'" data-mask type="text" id="zip_code" name="zip_code" value="{{ $person->zip_code ?? old('zip_code') }}">
+                <input class="form-control" data-inputmask="'mask':'99999-999'" data-mask type="text" id="zip_code" name="zip_code" value="{{ $person->addresses[0]['zip_code'] ?? old('zip_code') }}">
             </div>
         </div>
         <div class="col-sm-4">
             <div class="form-group">
                 <label for="address">Endereço</label>
-                <input class="form-control" type="text" id="street" name="street" value="{{ $person->street ?? old('street') }}">
+                <input class="form-control" type="text" id="street" name="street" value="{{ $person->addresses[0]['street'] ?? old('street') }}">
             </div>
         </div>
         <div class="col-sm-2">
             <div class="form-group">
                 <label for="number">Número</label>
-                <input class="form-control" type="text" id="number" name="number" value="{{ $person->number ?? old('number') }}">
+                <input class="form-control" type="text" id="number" name="number" value="{{ $person->addresses[0]['number'] ?? old('number') }}">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="complement">Complemento</label>
-                <input class="form-control" type="text" id="complement" name="complement" value="{{ $person->complement ?? old('complement') }}">
+                <input class="form-control" type="text" id="complement" name="complement" value="{{ $person->addresses[0]['complement'] ?? old('complement') }}">
             </div>
         </div>
     </div>
@@ -73,13 +73,13 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="district">Bairro</label>
-                <input class="form-control" type="text" id="district" name="district" value="{{ $person->district ?? old('district') }}">
+                <input class="form-control" type="text" id="district" name="district" value="{{ $person->addresses[0]['district'] ?? old('district') }}">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="reference">Ponto de referência</label>
-                <input class="form-control" type="text" id="reference" name="reference" value="{{ $person->reference ?? old('reference') }}">
+                <input class="form-control" type="text" id="reference" name="reference" value="{{ $person->addresses[0]['reference'] ?? old('reference') }}">
             </div>
         </div>
     </div>
@@ -87,25 +87,25 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="email">E-Mail</label>
-                <input class="form-control" data-inputmask-alias="email" data-mask type="text" id="email" name="email" value="{{ $person->email ?? old('email') }}">
+                <input class="form-control" data-inputmask-alias="email" data-mask type="text" id="email" name="email" value="{{ $person->addresses[0]['email'] ?? old('email') }}">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="cell">Telefone celular</label>
-                <input class="form-control" data-inputmask="'mask':'(99) 99999-9999'" data-mask type="text" id="cell" name="cell" value="{{ $person->cell ?? old('cell') }}">
+                <input class="form-control" data-inputmask="'mask':'(99) 99999-9999'" data-mask type="text" id="cell" name="cell" value="{{ $person->addresses[0]['cell'] ?? old('cell') }}">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="phone">Telefone fixo</label>
-                <input class="form-control" data-inputmask="'mask':'(99) 99999-9999'" data-mask type="text" id="phone" name="phone" value="{{ $person->phone ?? old('phone') }}">
+                <input class="form-control" data-inputmask="'mask':'(99) 99999-9999'" data-mask type="text" id="phone" name="phone" value="{{ $person->addresses[0]['phone'] ?? old('phone') }}">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="website">Website</label>
-                <input class="form-control" data-inputmask-alias="url" data-mask type="text" id="website" name="website" value="{{ $person->website ?? old('website') }}">
+                <input class="form-control" data-inputmask-alias="url" data-mask type="text" id="website" name="website" value="{{ $person->addresses[0]['website'] ?? old('website') }}">
             </div>
         </div>
     </div>

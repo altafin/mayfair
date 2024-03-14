@@ -11,8 +11,10 @@ use App\Models\Person\Document;
 use App\Models\Person\DocumentType;
 use App\Models\Person\Person;
 use App\Repositories\Contracts\PersonRepositoryInterface;
+use App\Enums\AddressType as EnumAddressType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use stdClass;
 
 class PersonRepository implements PersonRepositoryInterface
@@ -53,6 +55,7 @@ class PersonRepository implements PersonRepositoryInterface
     {
         $person = $this->model->find($id);
         $person->documents->where('document_type_id', ($person->type == 'F' ? 1 : 2));
+        $person->addresses->where('address_type_id', EnumAddressType::HOME);
         if (!$person) {
             return null;
         }
@@ -158,6 +161,43 @@ class PersonRepository implements PersonRepositoryInterface
                     $trashedDocument->restore();
                 }
             }
+
+            //Updates the person's home address
+
+            $temp = null;
+            foreach ($request->only($this->arrAddressFields) as $key => $value) {
+                $temp .= crc32($value) . '-';
+            }
+            dd(crc32($temp));
+            dd($request);
+
+            $address = $person->addresses->where('address_type_id', EnumAddressType::HOME)->where('active', 1)->first();
+            if ($address) {
+                if (!$request->anyFilled($this->arrAddressFields))
+                    $address->delete();
+            }
+//            $address->fill($request->only($this->arrAddressFields));
+//            if ($address->isDirty($this->arrAddressFields)) {
+//                if ($request->anyFilled($this->arrAddressFields)) {
+//                    dd('1-1');
+//                } else {
+//                    dd('2-2');
+//                }
+//                dd('1');
+//            } else {
+//                dd('2');
+//            }
+//            dd($address);
+
+
+//            //Bind with Addresses
+//            if ($request->anyFilled($this->arrAddressFields)) {
+//                $addressType = AddressType::find(1);
+//                $address = new Address($request->only($this->arrAddressFields));
+//                $address->addressType()->associate($addressType);
+//                $person->addresses()->save($address);
+//            }
+
 
             $person->save();
             return $person;
