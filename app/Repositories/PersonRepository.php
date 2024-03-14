@@ -131,20 +131,21 @@ class PersonRepository implements PersonRepositoryInterface
                 $document->value = $request->document;
                 if ($person->isDirty(['type']) or $document->isDirty('value')) {
                     $newDocument = true;
+                    //Place the person's document in the trash
                     $document->delete();
                 }
             }
 
             //Create a new document
             if ($newDocument and $request->filled('document')) {
-                //Checks that the record no longer exists as deleted
+                //Checks if the person's document is in the trash
                 $trashedDocument = Document::onlyTrashed()
                     ->where('document_type_id', $this->arrDocumentTypeId[$request->type])
                     ->where('value', $request->document)
                     ->where('person_id', $person->id)
                     ->first();
-//                dd($request->type . ' - ' . $this->arrDocumentTypeId[$request->type] . ' - ' . $request->document . ' - ' . $person->id . ' - ' . $trashedDocument);
                 if (!$trashedDocument) {
+                    //There is no document for the person in the trash, so create a new one
                     $document = new Document();
                     $document->value = $request->document;
                     //Get the document type
@@ -153,6 +154,7 @@ class PersonRepository implements PersonRepositoryInterface
                     $document->documentType()->associate($documentType);
                     $person->documents()->save($document);
                 } else {
+                    //Restore the person's document from the trash
                     $trashedDocument->restore();
                 }
             }
