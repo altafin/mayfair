@@ -112,46 +112,51 @@ class PersonRepository implements PersonRepositoryInterface
             if (!$person = $this->model->with(['documents'])->find($id)) {
                 return null;
             }
+
             //Update person data
             $person->fill($request->only('name', 'type'));
             $documentType = $person->type;
+
             //Checks if the person type has changed
             if ($person->isDirty(['type'])) {
                 //If it changed, take the old value
                 $documentType = $person->getOriginal('type');
             }
+
             //Get the specific type of document (F = 1 | J = 2)
             $document = $person->documents->where('document_type_id', $this->arrDocumentTypeId[$documentType])->first();
+            $newDocument = true;
             if ($document) {
-                $documentTemp = $document;
-                //Update the person's document temporary
-                $documentTemp->value = $request->document;
-                //Checks if the person's document has changed
-                if ($documentTemp->isDirty(['value'])) {
-                    if ($request->filled('document')) {
-                        //Delete the old document
-                        $document->delete();
-                        //Create the person's new document
-                        $document = new Document();
-                        $document->value = $request->document;
-                        $documentTypeId = $this->arrDocumentTypeId[$request->type];
-                        $documentType = DocumentType::find($documentTypeId);
-                        $document->documentType()->associate($documentType);
-                        $person->documents()->save($document);
-                    } else {
-                        //You changed the type but did not fill in the field, so you must remove the old document
-                        $document->delete();
-                    }
-                }
-            } else {
-                //Cria um novo documento caso não seja localizado nenhum anterior
-                $document = new Document();
+                $newDocument = false;
                 $document->value = $request->document;
-                $documentTypeId = $this->arrDocumentTypeId[$request->type];
-                $documentType = DocumentType::find($documentTypeId);
-                $document->documentType()->associate($documentType);
-                $person->documents()->save($document);
+                if ($person->isDirty(['type']) or $document->isDirty('value')) {
+                    $newDocument = true;
+                    $document->delete();
+                }
             }
+
+            //Create a new document
+            if ($newDocument and $request->filled('document')) {
+                //Checks that the record no longer exists as deleted
+                $trashedDocument = Document::onlyTrashed()
+                    ->where('document_type_id', $this->arrDocumentTypeId[$request->type])
+                    ->where('value', $request->document)
+                    ->where('person_id', $person->id)
+                    ->first();
+//                dd($request->type . ' - ' . $this->arrDocumentTypeId[$request->type] . ' - ' . $request->document . ' - ' . $person->id . ' - ' . $trashedDocument);
+                if (!$trashedDocument) {
+                    $document = new Document();
+                    $document->value = $request->document;
+                    //Get the document type
+                    $documentTypeId = $this->arrDocumentTypeId[$request->type];
+                    $documentType = DocumentType::find($documentTypeId);
+                    $document->documentType()->associate($documentType);
+                    $person->documents()->save($document);
+                } else {
+                    $trashedDocument->restore();
+                }
+            }
+
             $person->save();
             return $person;
         });
