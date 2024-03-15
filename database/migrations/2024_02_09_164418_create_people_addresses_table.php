@@ -28,7 +28,7 @@ return new class extends Migration
             $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
-            $table->string('deleted_integrity', 10)->nullable();
+            $table->string('deleted_integrity', 8)->nullable();
         });
     }
 

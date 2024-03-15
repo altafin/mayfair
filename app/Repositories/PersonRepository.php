@@ -19,7 +19,7 @@ use stdClass;
 class PersonRepository implements PersonRepositoryInterface
 {
     private $arrDocumentTypeId = array('F' => 1, 'J' => 2);
-    private $arrAddressFields = array('zip_code', 'street', 'number', 'complement', 'uf', 'city', 'district', 'reference');
+    private $arrAddressFields = array('zip_code', 'street', 'number', 'complement', 'state', 'city', 'district', 'reference');
     private $arrContactTypeId = array('email' => 1, 'phone' => 2, 'cell' => 3, 'website' => 4);
 
     public function __construct(
@@ -84,7 +84,7 @@ class PersonRepository implements PersonRepositoryInterface
             }
             //Bind with Addresses
             if ($request->anyFilled($this->arrAddressFields)) {
-                $addressType = AddressType::find(1);
+                $addressType = AddressType::find(EnumAddressType::HOME);
                 $address = new Address($request->only($this->arrAddressFields));
                 $address->addressType()->associate($addressType);
                 $person->addresses()->save($address);
@@ -162,40 +162,42 @@ class PersonRepository implements PersonRepositoryInterface
             }
 
             //Updates the person's home address
-            //dd($crc32Calculed);
-            //dd(crc32($crc32Calculed));
-            //dd($request);
+            $address = $person->addresses
+                ->where('address_type_id', EnumAddressType::HOME)
+                ->where('active', 1)
+                ->first();
 
-            $address = $person->addresses->where('address_type_id', EnumAddressType::HOME)->where('active', 1)->first();
-            if ($address) {
-                if (!$request->anyFilled($this->arrAddressFields)) {
-                    $address->delete();
+            if ($request->anyFilled($this->arrAddressFields)) {
+                $addressType = AddressType::find(EnumAddressType::HOME);
+                $addressVerify = new Address($request->only($this->arrAddressFields));
+                $addressVerify->addressType()->associate($addressType);
+                $addressVerify->person()->associate($person);
+                $calculedDeleteIntegrityCode = $addressVerify->generateDeleteIntegrityCode();
+
+                //Checks if the person's address home is in the trash
+                $trashedAddresses = Address::onlyTrashed()
+                    ->where('deleted_integrity', $calculedDeleteIntegrityCode)
+                    ->first();
+                if ($trashedAddresses) {
+                    //Remove if there is an active home address
+                    if ($address)
+                        $address->delete();
+                    //Restore the person's address home from the trash
+                    $trashedAddresses->restore();
+                } else {
+                    if ($address) {
+                        $address->fill($request->only($this->arrAddressFields));
+                    } else {
+                        $address = $addressVerify;
+                    }
+                    $person->addresses()->save($address);
                 }
+                $person->save();
+            } else {
+                if ($address)
+                    $address->delete();
             }
-//            $address->fill($request->only($this->arrAddressFields));
-//            if ($address->isDirty($this->arrAddressFields)) {
-//                if ($request->anyFilled($this->arrAddressFields)) {
-//                    dd('1-1');
-//                } else {
-//                    dd('2-2');
-//                }
-//                dd('1');
-//            } else {
-//                dd('2');
-//            }
-//            dd($address);
 
-
-//            //Bind with Addresses
-//            if ($request->anyFilled($this->arrAddressFields)) {
-//                $addressType = AddressType::find(1);
-//                $address = new Address($request->only($this->arrAddressFields));
-//                $address->addressType()->associate($addressType);
-//                $person->addresses()->save($address);
-//            }
-
-
-            $person->save();
             return $person;
         });
         return (object) $person->toArray();

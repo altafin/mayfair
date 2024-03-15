@@ -6,8 +6,6 @@ use App\Models\Person\Address;
 
 class AddressObserver
 {
-    private $arrAddressFields = array('zip_code', 'street', 'number', 'complement', 'uf', 'city', 'district', 'reference');
-
     /**
      * Handle the Address "created" event.
      */
@@ -29,13 +27,7 @@ class AddressObserver
      */
     public function deleted(Address $address): void
     {
-        //Calculate the delete integrity code
-        $crc32Calculed = $address->person_id;
-        foreach ($address as $key => $value) {
-            if (in_array($key, $this->arrAddressFields))
-                $crc32Calculed .= '-' . crc32($value);
-        }
-        $address->deleted_integrity = crc32($crc32Calculed);
+        $address->deleted_integrity = $address->generateDeleteIntegrityCode();
         $address->save();
     }
 
@@ -44,7 +36,8 @@ class AddressObserver
      */
     public function restored(Address $address): void
     {
-        //
+        $address->deleted_integrity = null;
+        $address->save();
     }
 
     /**
