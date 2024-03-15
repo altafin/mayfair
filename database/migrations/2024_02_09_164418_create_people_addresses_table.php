@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('complement', 150)->nullable();
             $table->string('state', 100)->nullable();
             $table->string('city', 100)->nullable();
-            $table->string('uf', 100)->nullable();
             $table->string('district', 150)->nullable();
             $table->string('reference', 150)->nullable();
             $table->unsignedBigInteger('person_id');
@@ -29,6 +28,7 @@ return new class extends Migration
             $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
+            $table->string('deleted_integrity', 10)->nullable();
         });
     }
 

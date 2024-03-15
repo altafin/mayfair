@@ -54,8 +54,8 @@
     <div class="row">
         <div class="col-sm-3">
             <div class="form-group">
-                <label for="uf">UF</label>
-                <select class="custom-select rounded-1" id="uf" name="uf">
+                <label for="state">UF</label>
+                <select class="custom-select rounded-1" id="state" name="state">
                     <option value=""></option>
                     <option value="PR">Paraná</option>
                 </select>

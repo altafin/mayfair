@@ -14,7 +14,6 @@ use App\Repositories\Contracts\PersonRepositoryInterface;
 use App\Enums\AddressType as EnumAddressType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use stdClass;
 
 class PersonRepository implements PersonRepositoryInterface
@@ -163,18 +162,15 @@ class PersonRepository implements PersonRepositoryInterface
             }
 
             //Updates the person's home address
-
-            $temp = null;
-            foreach ($request->only($this->arrAddressFields) as $key => $value) {
-                $temp .= crc32($value) . '-';
-            }
-            dd(crc32($temp));
-            dd($request);
+            //dd($crc32Calculed);
+            //dd(crc32($crc32Calculed));
+            //dd($request);
 
             $address = $person->addresses->where('address_type_id', EnumAddressType::HOME)->where('active', 1)->first();
             if ($address) {
-                if (!$request->anyFilled($this->arrAddressFields))
+                if (!$request->anyFilled($this->arrAddressFields)) {
                     $address->delete();
+                }
             }
 //            $address->fill($request->only($this->arrAddressFields));
 //            if ($address->isDirty($this->arrAddressFields)) {
