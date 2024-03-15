@@ -17,11 +17,15 @@ class DatabaseSeeder extends Seeder
             DocumentTypesTableSeeder::class,
             AddressTypesTableSeeder::class,
             ContactTypesTableSeeder::class,
+            RegionTableSeeder::class,
+            StateTableSeeder::class,
         ]);
         $this->command->info('User table seeded!');
         $this->command->info('Document types seeded!');
         $this->command->info('Address types seeded!');
         $this->command->info('Contact types seeded!');
+        $this->command->info('Region seeded!');
+        $this->command->info('State seeded!');
 
         // \App\Models\User::factory(10)->create();
 
