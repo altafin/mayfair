@@ -55,7 +55,7 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="state">UF</label>
-                <select class="custom-select rounded-1" id="state" name="state">
+                <select class="form-control select2 rounded-1" id="state" name="state" style="width: 100%;">
                     <option value=""></option>
                     <option value="PR">Paraná</option>
                 </select>
@@ -64,7 +64,7 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="city">Cidade</label>
-                <select class="custom-select rounded-1" id="city" name="city">
+                <select class="form-control select2 rounded-1" id="city" name="city" style="width: 100%;">
                     <option value=""></option>
                     <option value="Londrina">Londrina</option>
                 </select>

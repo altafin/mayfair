@@ -24,6 +24,9 @@
 @section('js')
     <script>
         $(function () {
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
             $('[data-mask]').inputmask();
             $('#type').on('change', function () {
                 $('#document').val('');
