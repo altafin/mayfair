@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Person;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdatePersonRequest;
+use App\Models\State;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -50,7 +51,8 @@ class PersonController extends Controller
             return back();
         }
         $model = $this->model;
-        return view('admin.person.edit', compact('person', 'model'));
+        $states = State::all()->toArray();
+        return view('admin.person.edit', compact('person', 'model', 'states'));
     }
 
     public function store(StoreUpdatePersonRequest $request)

@@ -26,8 +26,11 @@ $(function () {
             },
             cache: true
         },
+    }).on('select2:open', function(e) {
+        $('input.select2-search__field')[0].focus();
     }).on('select2:select', function(e){
-        $('city').prop("disabled", false);
+        $('#city').prop("disabled", false);
+        $('#city').val(null).trigger('change');
     });
 
     $('#city').select2({
@@ -35,7 +38,6 @@ $(function () {
         theme: 'bootstrap4',
         ajax: {
             url: function (params) {
-                console.log(params.data)
                 return '/admin/city/' + $('#state').val();
             },
             type: "get",
@@ -59,6 +61,8 @@ $(function () {
             },
             cache: true
         },
+    }).on('select2:open', function(e) {
+        $('input.select2-search__field')[0].focus();
     });
 
     $('[data-mask]').inputmask();

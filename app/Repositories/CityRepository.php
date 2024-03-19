@@ -11,9 +11,9 @@ class CityRepository implements CityRepositoryInterface
         protected City $model
     ) {}
 
-    public function getAll(string $state = null): array|null
+    public function getAll(string $state = null, string $city = null): array|null
     {
-        $cities = $this->model::where('state_id', $state)->get();
+        $cities = $this->model::where('state_id', $state)->where('cities.name', 'LIKE', "%$city%") ->get();
         return $cities->toArray();
     }
 }

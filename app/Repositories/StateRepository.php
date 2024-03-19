@@ -11,9 +11,9 @@ class StateRepository implements StateRepositoryInterface
         protected State $model
     ) {}
 
-    public function getAll(string $region = null): array|null
+    public function getAll(string $state = null, string $region = null): array|null
     {
-        $states = $this->model::with('region')->get();
+        $states = $this->model::with('region')->where('states.name', 'LIKE', "%$state%")->get();
         return $states->toArray();
     }
 }

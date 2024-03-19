@@ -13,7 +13,8 @@ class StateController extends Controller
 
     public function index(Request $request)
     {
-        $arrStates = $this->stateRepository->getAll();
+        $searchState = isset($request->search) ? $request->search : null;
+        $arrStates = $this->stateRepository->getAll($searchState);
         $pgInicial = ($request->qtdRegistros * $request->page) - $request->qtdRegistros;
         $pgFinal = ($request->qtdRegistros * $request->page) - 1;
         $pgFinal = ($pgFinal > count($arrStates) ? count($arrStates) - 1 : $pgFinal);

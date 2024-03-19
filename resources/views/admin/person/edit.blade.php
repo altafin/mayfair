@@ -18,27 +18,4 @@
 
 @section('js')
     <script type="application/javascript" src="/js/person.js"></script>
-{{--    <script>--}}
-{{--        $(function () {--}}
-{{--            $('[data-mask]').inputmask();--}}
-{{--            $('#type').on('change', function () {--}}
-{{--                $('#document').val('');--}}
-{{--                let opt = $(this).find(':selected').val();--}}
-{{--                var maskuse, labeluse;--}}
-
-{{--                switch (opt) {--}}
-{{--                    case 'F':--}}
-{{--                        labeluse = 'CPF';--}}
-{{--                        maskuse = '999.999.999-99';--}}
-{{--                        break;--}}
-{{--                    case 'J':--}}
-{{--                        labeluse = 'CNPJ';--}}
-{{--                        maskuse = '99.999.999/9999-99';--}}
-{{--                        break;--}}
-{{--                }--}}
-{{--                $('label[for="document"]').text(labeluse);--}}
-{{--                $('#document').attr('data-inputmask', "'mask':'".concat(maskuse).concat("'")).inputmask();--}}
-{{--            });--}}
-{{--        });--}}
-{{--    </script>--}}
 @stop

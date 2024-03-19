@@ -56,17 +56,19 @@
             <div class="form-group">
                 <label for="state">UF</label>
                 <select class="form-control select2 rounded-1" id="state" name="state" style="width: 100%;">
-                    <option value=""></option>
-                    <option value="PR">Paraná</option>
+                    @isset($states)
+                        @foreach($states as $state)
+                        <option value="{{ $state['id'] }}" {{ ($person->addresses[0]['state'] == $state['id'] ? 'selected' : '') }}>{{ $state['name'] }}</option>
+                        @endforeach
+                    @endisset
                 </select>
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="city">Cidade</label>
-                <select class="form-control select2 rounded-1" id="city" name="city" style="width: 100%;" disabled>
+                <select class="form-control select2 rounded-1" id="city" name="city" style="width: 100%;" @if (!isset($person)) disabled @endif>
                     <option value=""></option>
-                    <option value="Londrina">Londrina</option>
                 </select>
             </div>
         </div>

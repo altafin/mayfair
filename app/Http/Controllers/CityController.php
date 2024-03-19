@@ -13,7 +13,8 @@ class CityController extends Controller
 
     public function index(Request $request, $state)
     {
-        $arrCities = $this->cityRepository->getAll($state);
+        $searchCity = isset($request->search) ? $request->search : null;
+        $arrCities = $this->cityRepository->getAll($state, $searchCity);
         $pgInicial = ($request->qtdRegistros * $request->page) - $request->qtdRegistros;
         $pgFinal = ($request->qtdRegistros * $request->page) - 1;
         $pgFinal = ($pgFinal > count($arrCities) ? count($arrCities) - 1 : $pgFinal);
