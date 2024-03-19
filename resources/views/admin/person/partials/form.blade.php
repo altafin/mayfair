@@ -58,7 +58,7 @@
                 <select class="form-control select2 rounded-1" id="state" name="state" style="width: 100%;">
                     @isset($states)
                         @foreach($states as $state)
-                        <option value="{{ $state['id'] }}" {{ ($person->addresses[0]['state'] == $state['id'] ? 'selected' : '') }}>{{ $state['name'] }}</option>
+                        <option value="{{ $state['id'] }}" @if (isset($states)) {{ (($person->addresses[0]['state'] ?? old('state')) == $state['id'] ? 'selected' : '') }} @endif>{{ $state['name'] }}</option>
                         @endforeach
                     @endisset
                 </select>
@@ -68,7 +68,11 @@
             <div class="form-group">
                 <label for="city">Cidade</label>
                 <select class="form-control select2 rounded-1" id="city" name="city" style="width: 100%;" @if (!isset($person)) disabled @endif>
-                    <option value=""></option>
+                    @isset($cities)
+                        @foreach($cities as $city)
+                            <option value="{{ $city['id'] }}" {{ ($person->addresses[0]['city'] == $city['id'] ? 'selected' : '') }}>{{ $city['name'] }}</option>
+                        @endforeach
+                    @endisset
                 </select>
             </div>
         </div>
@@ -101,7 +105,7 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="phone">Telefone fixo</label>
-                <input class="form-control" data-inputmask="'mask':'(99) 99999-9999'" data-mask type="text" id="phone" name="phone" value="{{ $person->addresses[0]['phone'] ?? old('phone') }}">
+                <input class="form-control" data-inputmask="'mask':'(99) 9999-9999'" data-mask type="text" id="phone" name="phone" value="{{ $person->addresses[0]['phone'] ?? old('phone') }}">
             </div>
         </div>
         <div class="col-sm-3">
