@@ -67,4 +67,9 @@ class PersonController extends Controller
         }
         return redirect()->route(strtolower($this->model) . '.index');
     }
+
+    public function select(Request $request)
+    {
+
+    }
 }
