@@ -26,6 +26,39 @@ $(function () {
             },
             cache: true
         },
+    }).on('select2:select', function(e){
+        $('city').prop("disabled", false);
+    });
+
+    $('#city').select2({
+        language: "pt-BR",
+        theme: 'bootstrap4',
+        ajax: {
+            url: function (params) {
+                console.log(params.data)
+                return '/admin/city/' + $('#state').val();
+            },
+            type: "get",
+            dataType: "json",
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term, // search term
+                    page: params.page || 1,
+                    qtdRegistros: qtdRegistros
+                };
+            },
+            processResults: function (data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: data.items,
+                    pagination: {
+                        more: (params.page * qtdRegistros) < data.count_filtered
+                    }
+                };
+            },
+            cache: true
+        },
     });
 
     $('[data-mask]').inputmask();

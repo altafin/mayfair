@@ -64,7 +64,7 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="city">Cidade</label>
-                <select class="form-control select2 rounded-1" id="city" name="city" style="width: 100%;">
+                <select class="form-control select2 rounded-1" id="city" name="city" style="width: 100%;" disabled>
                     <option value=""></option>
                     <option value="Londrina">Londrina</option>
                 </select>
