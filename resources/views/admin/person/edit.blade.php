@@ -17,5 +17,5 @@
 @stop
 
 @section('js')
-    <script type="application/javascript" src="/js/person.js"></script>
+    @vite(['resources/js/person.js'])
 @stop
