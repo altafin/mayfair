@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Person;
 
+use App\Enums\ContactType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdatePersonRequest;
 use App\Models\City;
+use App\Models\Person\Contact;
 use App\Models\State;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use Illuminate\Http\Request;
@@ -53,11 +55,31 @@ class PersonController extends Controller
         }
         $model = $this->model;
         $states = $cities = null;
+        $email = $phone = $cell = $website = null;
         if(count($person->addresses) > 0) {
             $states = State::all()->toArray();
             $cities = City::where('state_id', $person->addresses[0]['state'])->get()->toArray();
         }
-        return view('admin.person.edit', compact('person', 'model', 'states', 'cities'));
+        if(count($person->contacts) > 0) {
+            foreach ($person->contacts as $contact) {
+                switch ($contact['contact_type_id']) {
+                    case ContactType::EMAIL:
+                        $email = $contact['value'];
+                        break;
+                    case ContactType::PHONE:
+                        $phone = $contact['value'];
+                        break;
+                    case ContactType::CELL:
+                        $cell = $contact['value'];
+                        break;
+                    case ContactType::WEBSITE:
+                        $website = $contact['value'];
+                        break;
+                }
+            }
+        }
+        return view('admin.person.edit', compact('person', 'model', 'states', 'cities',
+            'email', 'phone', 'cell', 'website'));
     }
 
     public function store(StoreUpdatePersonRequest $request)

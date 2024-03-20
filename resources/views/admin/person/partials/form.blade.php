@@ -93,25 +93,25 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="email">E-Mail</label>
-                <input class="form-control" data-inputmask-alias="email" data-mask type="text" id="email" name="email" value="{{ $person->addresses[0]['email'] ?? old('email') }}">
+                <input class="form-control" data-inputmask-alias="email" data-mask type="text" id="email" name="email" value="{{ $email ?? old('email') }}">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="cell">Telefone celular</label>
-                <input class="form-control" data-inputmask="'mask':'(99) 99999-9999'" data-mask type="text" id="cell" name="cell" value="{{ $person->addresses[0]['cell'] ?? old('cell') }}">
+                <input class="form-control" data-inputmask="'mask':'(99) 99999-9999'" data-mask type="text" id="cell" name="cell" value="{{ $cell ?? old('cell') }}">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="phone">Telefone fixo</label>
-                <input class="form-control" data-inputmask="'mask':'(99) 9999-9999'" data-mask type="text" id="phone" name="phone" value="{{ $person->addresses[0]['phone'] ?? old('phone') }}">
+                <input class="form-control" data-inputmask="'mask':'(99) 9999-9999'" data-mask type="text" id="phone" name="phone" value="{{ $phone ?? old('phone') }}">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="website">Website</label>
-                <input class="form-control" data-inputmask-alias="url" data-mask type="text" id="website" name="website" value="{{ $person->addresses[0]['website'] ?? old('website') }}">
+                <input class="form-control" data-inputmask-alias="url" data-mask type="text" id="website" name="website" value="{{ $website ?? old('website') }}">
             </div>
         </div>
     </div>

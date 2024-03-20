@@ -12,6 +12,7 @@ use App\Models\Person\DocumentType;
 use App\Models\Person\Person;
 use App\Repositories\Contracts\PersonRepositoryInterface;
 use App\Enums\AddressType as EnumAddressType;
+use App\Enums\ContactType as EnumContactType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use stdClass;
@@ -52,7 +53,7 @@ class PersonRepository implements PersonRepositoryInterface
 
     public function findOne(string $id): stdClass|null
     {
-        $person = $this->model->find($id);
+        $person = $this->model::with(['contacts'])->find($id);
         $person->documents->where('document_type_id', ($person->type == 'F' ? 1 : 2));
         $person->addresses->where('address_type_id', EnumAddressType::HOME);
         if (!$person) {
@@ -111,7 +112,7 @@ class PersonRepository implements PersonRepositoryInterface
     {
         $person = DB::transaction(function () use ($request, $id) {
             //Find Person
-            if (!$person = $this->model->with(['documents'])->find($id)) {
+            if (!$person = $this->model->with(['documents', 'contacts'])->find($id)) {
                 return null;
             }
 
@@ -192,12 +193,54 @@ class PersonRepository implements PersonRepositoryInterface
                     }
                     $person->addresses()->save($address);
                 }
-                $person->save();
             } else {
                 if ($address)
                     $address->delete();
             }
 
+            //Update the person's contacts
+            $arrContactFields = array_keys($this->arrContactTypeId);
+            if ($request->anyFilled($arrContactFields)) {
+                //Update the person's contacts
+                foreach ($this->arrContactTypeId as $key => $value) {
+                    $contact = $person->contacts->where('contact_type_id', $value)->first();
+                    if ($request->filled($key)) {
+                        $contactType = ContactType::find($value);
+                        $contactVerify = new Contact();
+                        $contactVerify->contactType()->associate($contactType);
+                        $contactVerify->value = $request->$key;
+
+                        //Checks if the person's contacts is in the trash
+                        $trashedContact = Contact::onlyTrashed()
+                            ->where('contact_type_id', $value)
+                            ->where('value', $request->$key)
+                            ->where('person_id', $person->id)
+                            ->first();
+                        if ($trashedContact) {
+                            //Remove if there is an active contact
+                            if ($contact)
+                                $contact->delete();
+                            //Restore the person's address home from the trash
+                            $trashedContact->restore();
+                        } else {
+                            if ($contact) {
+                                $contact->value = $request->$key;
+                            } else {
+                                $contact = $contactVerify;
+                            }
+                            $person->contacts()->save($contact);
+                        }
+                    } else {
+                        if ($contact)
+                            $contact->delete();
+                    }
+                }
+            } else {
+                foreach ($person->contacts as $contact) {
+                    $contact->delete();
+                }
+            }
+            $person->save();
             return $person;
         });
         return (object) $person->toArray();
