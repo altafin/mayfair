@@ -29,17 +29,9 @@ class PersonController extends Controller
             totalPerPage: $request->get('per_page', 15),
             filter: $request->filter
         );
-
         $filters = ['filter' => $request->get('filter', '')];
-
-        //$people = $this->personRepository->getPagination();
-        //$people = $this->personRepository->getAll($request->filter);
         $model = $this->model;
         return view('admin.person.index', compact('people', 'model', 'filters'));
-
-        //$model = ucfirst(explode('.', $request->route()->getName())[0]);
-        //dd(get_class($this));
-        //dd(get_parent_class($this));
     }
 
     public function create()
