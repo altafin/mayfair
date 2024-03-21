@@ -318,7 +318,7 @@ return [
 //        ],
         [
             'text'        => 'Client',
-            'url'         => 'admin/client',
+            'url'         => 'admin/simplified/client',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
