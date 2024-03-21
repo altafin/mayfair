@@ -69,13 +69,7 @@
 @stop
 
 @section('css')
-
-
 @stop
 
 @section('js')
-    <script>
-    $(function () {
-    });
-    </script>
 @stop

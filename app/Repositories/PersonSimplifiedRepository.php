@@ -10,14 +10,14 @@ use App\Models\Person\ContactType;
 use App\Models\Person\Document;
 use App\Models\Person\DocumentType;
 use App\Models\Person\Person;
-use App\Repositories\Contracts\PersonRepositoryInterface;
+use App\Repositories\Contracts\PersonSimplifiedRepositoryInterface;
 use App\Enums\AddressType as EnumAddressType;
 use App\Enums\ContactType as EnumContactType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 
-class PersonRepository implements PersonRepositoryInterface
+class PersonSimplifiedRepository implements PersonSimplifiedRepositoryInterface
 {
     private $arrDocumentTypeId = array('F' => 1, 'J' => 2);
     private $arrAddressFields = array('zip_code', 'street', 'number', 'complement', 'state', 'city', 'district', 'reference');

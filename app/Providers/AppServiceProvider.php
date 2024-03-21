@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Repositories\Contracts\PersonRepositoryInterface;
+use App\Repositories\Contracts\PersonSimplifiedRepositoryInterface;
 use App\Repositories\Contracts\RegionRepositoryInterface;
 use App\Repositories\Contracts\StateRepositoryInterface;
 use App\Repositories\Contracts\CityRepositoryInterface;
 
-use App\Repositories\PersonRepository;
+use App\Repositories\PersonSimplifiedRepository;
 use App\Repositories\RegionRepository;
 use App\Repositories\StateRepository;
 use App\Repositories\CityRepository;
@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
-        $this->app->bind(PersonRepositoryInterface::class, PersonRepository::class);
+        $this->app->bind(PersonSimplifiedRepositoryInterface::class, PersonSimplifiedRepository::class);
         $this->app->bind(RegionRepositoryInterface::class, RegionRepository::class);
         $this->app->bind(StateRepositoryInterface::class, StateRepository::class);
         $this->app->bind(CityRepositoryInterface::class, CityRepository::class);

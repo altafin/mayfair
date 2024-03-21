@@ -5,7 +5,7 @@ namespace App\Repositories\Contracts;
 use App\Http\Requests\StoreUpdatePersonRequest;
 use stdClass;
 
-interface PersonRepositoryInterface
+interface PersonSimplifiedRepositoryInterface
 {
     public function getAll(string $filter = null): array;
     public function getPaginate(int $page = 1, int $totalPerPage = 15, string $filter = null);
