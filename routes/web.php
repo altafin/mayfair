@@ -3,7 +3,8 @@
 use App\Http\Controllers\{
     ClientSimplifiedController,
     StateController,
-    CityController
+    CityController,
+    ZipCodeController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::middleware(['auth'])->group(function() {
     Route::resource('/admin/simplified/client', ClientSimplifiedController::class);
     Route::resource('/admin/state', StateController::class)->only('index');
     Route::resource('/admin/city/{state}', CityController::class)->only('index');
+    Route::get('/zipcode/search', [ZipCodeController::class, 'search'])->name('zipcode.search');
 });
 
 Auth::routes();

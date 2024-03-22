@@ -5,24 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class City extends Model
+class ZipCode extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'zip_code',
+        'street',
+        'district',
+        'city',
+        'state',
     ];
+
+    protected $hidden = ['created_at', 'updated_at'];
 
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);
     }
 
-    public function zipCodes(): HasMany
+    public function city(): BelongsTo
     {
-        return $this->hasMany(ZipCode::class);
+        return $this->belongsTo(City::class);
     }
 
 }

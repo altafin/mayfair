@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-    <form action="{{ route(strtolower($model) . '.update', $person->id) }}" method="post">
+    <form action="{{ route(strtolower($model) . '.update', $person->id) }}" method="post" onsubmit="return false;">
         @method('PUT')
         @include('admin.person.partials.form', ['person' => $person, 'model' => $model])
     </form>

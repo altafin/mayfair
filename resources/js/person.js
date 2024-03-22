@@ -84,9 +84,9 @@ $(function () {
         $('label[for="document"]').text(labeluse);
         $('#document').attr('data-inputmask', "'mask':'".concat(maskuse).concat("'")).inputmask();
     });
+    $('#name').focus();
 });
 
 function obterUF()
 {
-    $('#state')
 }
