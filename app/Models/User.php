@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Person::class);
     }
+
+    public function zipCodes(): HasMany
+    {
+        return $this->hasMany(ZipCode::class);
+    }
 }
