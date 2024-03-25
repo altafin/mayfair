@@ -49,7 +49,7 @@ class CityTableSeeder extends Seeder
                 $line = fgets($content);
                 if (!empty($line)) {
                     $arrCity = array(
-                        'name' => $line,
+                        'name' => trim($line),
                         'state_id' => $id,
                     );
                     City::factory()->create($arrCity);

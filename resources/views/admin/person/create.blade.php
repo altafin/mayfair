@@ -4,7 +4,6 @@
 
 @section('content_header')
     <h1>Novo Cliente</h1>
-{{--    <h1>New {{ $model }}</h1>--}}
 @stop
 
 @section('content')

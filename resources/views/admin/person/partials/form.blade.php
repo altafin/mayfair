@@ -29,7 +29,12 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="zip_code">CEP</label>
-                <input class="form-control" data-inputmask="'mask':'99999-999'" data-mask type="text" id="zip_code" name="zip_code" value="{{ $person->addresses[0]['zip_code'] ?? old('zip_code') }}">
+                <div class="input-group sm-3">
+                    <input class="form-control" data-inputmask="'mask':'99999-999'" data-mask type="text" id="zip_code" name="zip_code" value="{{ $person->addresses[0]['zip_code'] ?? old('zip_code') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="btnZipCodeSearch"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-sm-4">
