@@ -16,6 +16,8 @@ class State extends Model
         'abbreviation'
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);

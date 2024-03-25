@@ -21,7 +21,7 @@ class StateTableSeeder extends Seeder
                 list($id, $name, $abbreviation, $region_id) = explode(';', $line);
                 $arrState = array(
                     'id' => $id,
-                    'name' => $name,
+                    'name' => trim($name),
                     'abbreviation' => $abbreviation,
                     'region_id' => $region_id,
                 );

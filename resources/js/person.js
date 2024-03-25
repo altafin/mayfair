@@ -84,9 +84,42 @@ $(function () {
         $('label[for="document"]').text(labeluse);
         $('#document').attr('data-inputmask', "'mask':'".concat(maskuse).concat("'")).inputmask();
     });
+
+    $('#btnZipCodeSearch').on('click', function () {
+        $.ajax({
+            url: '/zipcode/search',
+            type: "get",
+            dataType: 'json',
+            data: {
+                'zip_code': $('#zip_code').inputmask('unmaskedvalue')
+            },
+        }).done(function(data) {
+            if (!('erro' in data)) {
+                $('#street').val(data.street);
+                $('#district').val(data.district);
+                exibirUF(data.state);
+                exibirCidade(data.city);
+                $('#number').focus();
+            }
+        });
+    });
+
+    function exibirUF(state)
+    {
+        $('#state').append($('<option>', {value: state.id, text: state.name}));
+    }
+
+    function exibirCidade(city)
+    {
+        $('#city').prop("disabled", false);
+        $('#city').append($('<option>', {value: city.id, text: city.name}));
+    }
+
+    $(document).keypress(function(event){
+        if (event.which == '13' && event.target.nodeName == 'INPUT' && event.target.type == 'text') {
+            event.preventDefault();
+        }
+    });
+
     $('#name').focus();
 });
-
-function obterUF()
-{
-}

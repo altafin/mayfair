@@ -15,6 +15,8 @@ class City extends Model
         'name',
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);
