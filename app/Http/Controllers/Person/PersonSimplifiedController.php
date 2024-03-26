@@ -91,13 +91,10 @@ class PersonSimplifiedController extends Controller
         return redirect()->route(strtolower($this->model) . '.index');
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-
-        dd($request);
-
-        $this->personSimplifieRepository->delete($request->id);
-        redirect()->route('person.index');
+        $this->personSimplifieRepository->delete($id);
+        return redirect()->route(strtolower($this->model) . '.index');
     }
 
     public function select(Request $request)
