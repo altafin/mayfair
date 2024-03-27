@@ -7,7 +7,8 @@ $(function () {
 
     function deletePerson(url) {
         $("#deleteForm").attr('action', url);
-        console.log(url);
     }
+
+    window.deletePerson = deletePerson;
 
 });
