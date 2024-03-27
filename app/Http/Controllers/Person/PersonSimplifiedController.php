@@ -97,6 +97,12 @@ class PersonSimplifiedController extends Controller
         return redirect()->route(strtolower($this->model) . '.index');
     }
 
+    public function search(Request $request)
+    {
+        $person = $this->personSimplifieRepository->search($request->name);
+        echo json_encode(array('person' => $person));
+    }
+
     public function select(Request $request)
     {
 

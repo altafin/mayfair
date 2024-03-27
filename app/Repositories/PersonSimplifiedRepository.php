@@ -245,4 +245,19 @@ class PersonSimplifiedRepository implements PersonSimplifiedRepositoryInterface
         });
         return (object) $person->toArray();
     }
+
+    public function search($name): stdClass|null
+    {
+        $person = $this->model
+            ->where(function ($query) use ($name) {
+                if ($name) {
+                    $query->Where('name', $name);
+                }
+            })
+            ->get();
+        $result = null;
+        if ($person)
+            $result = (object)$person->toArray();
+        return $result;
+    }
 }

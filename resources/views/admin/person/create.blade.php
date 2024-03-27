@@ -22,4 +22,27 @@
 
 @section('js')
     @vite(['resources/js/person.js'])
+    <script>
+        $('#name').on('blur', function() {
+            var searchName = $(this).val();
+            searchPersonByName(searchName);
+        });
+
+        function searchPersonByName(name)
+        {
+            if (name) {
+                $.ajax({
+                    url: '/admin/simplified/client/search',
+                    type: "get",
+                    dataType: 'json',
+                    data: {
+                        'name': name
+                    },
+                }).done(function (result) {
+                    if (result.person)
+                        console.log(result.person.length);
+                });
+            }
+        }
+    </script>
 @stop

@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function() {
 
     //Route::resource('/admin/person', PersonController::class);
     //Route::get('/admin/client/list', [ClientController::class, 'list'])->name('client.list');
+    Route::get('/admin/simplified/client/search', [ClientSimplifiedController::class, 'search'])->name('client.search');
     Route::resource('/admin/simplified/client', ClientSimplifiedController::class);
     Route::resource('/admin/state', StateController::class)->only('index');
     Route::resource('/admin/city/{state}', CityController::class)->only('index');
